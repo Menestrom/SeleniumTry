@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenQA.Selenium.Interactions;
 
 
 namespace Selenium_try
@@ -18,7 +19,6 @@ namespace Selenium_try
         public void startBrowser()
         {
             driver = new ChromeDriver("C:\\Users\\yevhenta\\.nuget\\packages\\Selenium.WebDriver.ChromeDriver\\2.41.0\\driver\\win32");
-            driver.moveToEleme
         }
         [Test]
         public void test()
@@ -29,7 +29,10 @@ namespace Selenium_try
             IWebElement passwordTextBox = driver.FindElement(By.Id("password"));
             IWebElement singUpButton = driver.FindElement(By.Id("login-button"));
 
+            var actions = new Actions(driver);
+            actions.MoveToElement(emailTextBox);
             emailTextBox.SendKeys("CashierTest1");
+            actions.MoveToElement(passwordTextBox);
             passwordTextBox.SendKeys("Qwerty1");
             singUpButton.Click();
 
