@@ -1,0 +1,27 @@
+using OpenQA.Selenium;
+
+namespace PromotionPlanTests.UIMap
+{
+    public class LoginPage
+    {
+        private readonly IWebDriver driverForLogin;
+
+        public LoginPage(IWebDriver driver)
+        {
+            driverForLogin = driver;
+        }
+        IWebElement userNameField => driverForLogin.FindElement(By.XPath("//*[@id=\"txtLogin\"]"), 10);
+        IWebElement passwordField => driverForLogin.FindElement(By.XPath("//*[@id=\"Password\"]"), 10);
+        IWebElement loginButton => driverForLogin.FindElement(By.XPath("//*[@id=\"Login\"]"), 10);
+
+        public void EnterUserNameAndPassword(string username, string password)
+        {
+            userNameField.SendKeys(username);
+            passwordField.SendKeys(password);
+        }
+        public void ClickLogin()
+        {
+            loginButton.Click();
+        }
+    }
+}
