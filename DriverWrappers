@@ -1,33 +1,43 @@
 using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Threading;
 
 namespace PromotionPlanTests
 {
-    public static class WebDriverExtensions
-    {
-        public static IWebElement FindElement(this IWebDriver driver, By by, int timeoutInSeconds)
-        {
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
-            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(By.Id("modalPopupMask")));
-            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(by));
-            return driver.FindElement(by);
-        }
-    }
     public class WebElement
     {
         private IWebElement _element;
-
+        public static IWebDriver driver = new ChromeDriver();
+        public static void Url(string url)
+        {
+            driver.Navigate().GoToUrl(url);
+        }
         public void SendKeys(string input)
         {
             _element.Clear();
-            Thread.Sleep(1000);
             _element.SendKeys(input);
         }
         public void Click()
         {
+            Thread.Sleep(50);
             _element.Click();
         }
+        public WebElement FindByXpath(string xpath)
+        {
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan
+                .FromSeconds(5);
+            _element = driver.FindElement(By.XPath(xpath));
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(By.Id("modalPopupMask")));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(_element));
+            return this;
+        }
+        public string GetAttribute(string value)
+        {
+            return _element.GetAttribute(value);
+        }
     }
+
 }
