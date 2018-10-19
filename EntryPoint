@@ -1,0 +1,28 @@
+using System.Threading;
+using PromotionPlanTests.UIMap;
+using PromotionPlanTests.Actions;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+namespace PromotionPlanTests
+{
+    class EntryPoint
+    {
+        static void Main()
+        {
+            IWebDriver driver = new ChromeDriver();
+            WebElement.Url(Config.BarcUrl.QA3);           
+            Navigation navigate = new Navigation();
+            navigate.NewPlanPage();
+
+
+            //int id = newPlan.FindPlanID();
+            //var context = new BarcaDB();
+            //var query = from c in context.PromotionPlans
+            //            where c.ID == id
+            //            select c;
+
+
+        }
+    }
+}
