@@ -15,7 +15,7 @@ namespace PromotionPlanTests
             return driver.FindElement(by);
         }
     }
-    public class WebDElement
+    public class WebElement
     {
         private IWebElement _element;
 
