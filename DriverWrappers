@@ -1,0 +1,33 @@
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using System;
+using System.Threading;
+
+namespace PromotionPlanTests
+{
+    public static class WebDriverExtensions
+    {
+        public static IWebElement FindElement(this IWebDriver driver, By by, int timeoutInSeconds)
+        {
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(By.Id("modalPopupMask")));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(by));
+            return driver.FindElement(by);
+        }
+    }
+    public class MyElements
+    {
+        private IWebElement _element;
+
+        public void SendKeys(string input)
+        {
+            _element.Clear();
+            Thread.Sleep(1000);
+            _element.SendKeys(input);
+        }
+        public void Click()
+        {
+            _element.Click();
+        }
+    }
+}
