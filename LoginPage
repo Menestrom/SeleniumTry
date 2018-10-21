@@ -1,18 +1,17 @@
 using OpenQA.Selenium;
 
-namespace PromotionPlanTests.UIMap
+namespace PromotionPlanTests
 {
     public class LoginPage
     {
-        private readonly IWebDriver driverForLogin;
-
+        private WebElement _element;      
         public LoginPage(IWebDriver driver)
         {
-            driverForLogin = driver;
+            _element = new WebElement(driver);
         }
-        IWebElement userNameField => driverForLogin.FindElement(By.XPath("//*[@id=\"txtLogin\"]"), 10);
-        IWebElement passwordField => driverForLogin.FindElement(By.XPath("//*[@id=\"Password\"]"), 10);
-        IWebElement loginButton => driverForLogin.FindElement(By.XPath("//*[@id=\"Login\"]"), 10);
+        WebElement userNameField => _element.FindByXpath("//*[@name=\"login\"]");
+        WebElement passwordField => _element.FindByXpath("//*[@name=\"password\"]");
+        WebElement loginButton => _element.FindByXpath("//*[@class=\"btn btn-default btn-xs\"]");
 
         public void EnterUserNameAndPassword(string username, string password)
         {
