@@ -1,0 +1,35 @@
+namespace PromotionPlanTests
+{
+    using NUnit.Framework;
+    using OpenQA.Selenium;
+    [Parallelizable]
+    public class LoginInvalidUsername
+    {
+        public IWebDriver driver;
+        public LoginPage loginPage;
+
+        [OneTimeSetUp]
+        public void Initialize()
+        {
+            driver = WebDriver.InitializeDriver(Config.BarcUrl.QA3, 30);
+            loginPage = new LoginPage(driver);
+        }
+        [TestCase]
+        public void InvalidUsername1()
+        {
+            loginPage.EnterUserNameAndPassword(Config.Credentials.Login.incorrect, Config.Credentials.Password.correct);
+            loginPage.ClickLogin();
+        }
+        [TestCase]
+        public void InvalidUsername2()
+        {
+            loginPage.EnterUserNameAndPassword(Config.Credentials.Login.incorrect, Config.Credentials.Password.correct);
+            loginPage.ClickLogin();
+        }
+        [OneTimeTearDown]
+        public void Close()
+        {
+            driver.Close();
+        }
+    }
+}
