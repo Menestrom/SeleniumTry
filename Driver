@@ -3,8 +3,14 @@ using OpenQA.Selenium.Chrome;
 
 namespace PromotionPlanTests
 {
-    public static class Driver
+    public static class WebDriver
     {
-        public static IWebDriver driver = new ChromeDriver();
+        public static IWebDriver InitializeDriver(string url, int second)
+        {
+            IWebDriver driver = new ChromeDriver();
+            driver.Navigate().GoToUrl(url);
+            driver.Manage().Window.FullScreen();
+            return driver;
+        }
     }
 }
