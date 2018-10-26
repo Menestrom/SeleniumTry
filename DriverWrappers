@@ -1,23 +1,8 @@
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using System;
+using System.Threading;
 
 namespace PromotionPlanTests
 {
-    public class WebDriver
-    {
-        public static IWebDriver InitializeDriver(string url, int second)
-        {
-            IWebDriver driver = new ChromeDriver();
-            driver.Navigate().GoToUrl(url);
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(second));
-            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(By.Id("modalPopupMask")));
-            TimeSpan seconds = TimeSpan.FromSeconds(second);
-            driver.Manage().Timeouts().ImplicitWait = seconds;
-            return driver;
-        }
-    }
     public class WebElement
     {
         private IWebDriver _driver;
@@ -25,25 +10,58 @@ namespace PromotionPlanTests
         public WebElement(IWebDriver driver)
         {
             _driver = driver;
+
         }
         public void SendKeys(string input)
         {
-
+            // Wait(_driver, _element);
+            Thread.Sleep(2000);
             _element.Clear();
             _element.SendKeys(input);
         }
         public void Click()
         {
+            Wait(_driver, _element);
             _element.Click();
         }
         public WebElement FindByXpath(string xpath)
         {
+            
             _element = _driver.FindElement(By.XPath(xpath));
+            return this;
+        }
+
+        public bool IsElementDisplayed(string xpath)
+        {
+            try
+            {
+                _element = _driver.FindElement(By.XPath(xpath));
+                return _element.Displayed;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public WebElement FindByCss(string css)
+        {
+            _element = _driver.FindElement(By.CssSelector(css));
             return this;
         }
         public string GetAttribute(string value)
         {
             return _element.GetAttribute(value);
         }
+
+        delegate WebElement Wait(string xpath);
+
+
+        //public void Wait(IWebDriver driver, IWebElement element)
+        //{
+        //    // driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+
+        //}
+
+
     }
 }
