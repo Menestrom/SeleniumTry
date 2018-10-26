@@ -1,0 +1,55 @@
+using PromotionPlanTests.UIMap;
+using PromotionPlanTests.Actions;
+using PromotionPlanTests.Configurations;
+using PromotionPlanTests.DBHelpers;
+
+namespace PromotionPlanTests
+{
+    using NUnit.Framework;
+    using OpenQA.Selenium;
+    using System.Collections.Generic;
+
+    [Parallelizable]
+    public class LoginInvalidUsername
+    {
+        public IWebDriver driver;
+        public LoginPage loginPage;
+        public HomePage homePage;
+        public List<string> rewards = new List<string>{ "BingoBonus", "GameBonus" };
+        public string planName = "CreatingPromotionPlanTest";
+
+        [OneTimeSetUp]
+        public void Initialize()
+        {
+            driver = WebDriver.InitializeDriver(ServerConfigs.BarcUrl.QA3, 30);
+            NavigateTo navigateTo = new NavigateTo(driver);
+            navigateTo.NewPlanPage(ServerConfigs.BarcUser.bot2);
+            DBHelper dbHelper = new DBHelper();
+        }
+        [Test]
+        public void InvalidUsername1()
+        {
+            Action actions = new Action(driver);
+            actions.NewPromotionPlanCreation(planName, "1", rewards, "1");
+            ActionsForDB.Selection select = new ActionsForDB.Selection();
+            select.PromotionPlanData(planName);
+        }
+        [Test]
+        public void InvalidUsername2()
+        {
+
+        }
+        [TearDown]
+        public void DeleteFromDb()
+        {
+            UpdateDB update = new UpdateDB();
+            update.UpdatePromotionPlanName(planName);
+        }
+        
+        [OneTimeTearDown]
+        public void Close()
+        {
+            driver.Close();
+        }
+    }
+}
