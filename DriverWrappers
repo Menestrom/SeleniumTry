@@ -1,4 +1,9 @@
+using NUnit.Framework.Internal;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.UI;
+
+using System;
 using System.Threading;
 
 namespace PromotionPlanTests
@@ -7,61 +12,100 @@ namespace PromotionPlanTests
     {
         private IWebDriver _driver;
         private IWebElement _element;
+
         public WebElement(IWebDriver driver)
         {
             _driver = driver;
-
         }
         public void SendKeys(string input)
         {
-            // Wait(_driver, _element);
-            Thread.Sleep(2000);
             _element.Clear();
             _element.SendKeys(input);
         }
         public void Click()
         {
-            Wait(_driver, _element);
             _element.Click();
+        }
+        public void Select()
+        {
+            SelectElement select = new SelectElement(_element);
+
         }
         public WebElement FindByXpath(string xpath)
         {
-            
-            _element = _driver.FindElement(By.XPath(xpath));
+            int timeout = 10;
+            bool result = false;
+            for (int i = 0; i < timeout; i+=1)
+            {
+                if (result == false)
+                {
+                    Thread.Sleep(1000);
+                    IWebElement element = _driver.FindElement(By.XPath(xpath));
+                    result = (element.Enabled);
+                }
+                else
+                {
+                    _element = _driver.FindElement(By.XPath(xpath));
+                    return this;
+                }
+            }
             return this;
         }
-
-        public bool IsElementDisplayed(string xpath)
+        public WebElement FindByXpath(string xpath, string variable)
         {
-            try
+            int timeout = 10;
+            bool result = false;
+            for (int i = 0; i < timeout; i += 1)
             {
-                _element = _driver.FindElement(By.XPath(xpath));
-                return _element.Displayed;
+                if (result == false)
+                {
+                    Thread.Sleep(1000);
+                    IWebElement element = _driver.FindElement(By.XPath(xpath));
+                    result = (element.Enabled);
+                }
+                else
+                {
+                    _element = _driver.FindElement(By.XPath(xpath));
+                    return this;
+                }
             }
-            catch
-            {
-                return false;
-            }
-        }
-        public WebElement FindByCss(string css)
-        {
-            _element = _driver.FindElement(By.CssSelector(css));
             return this;
         }
         public string GetAttribute(string value)
         {
             return _element.GetAttribute(value);
         }
-
-        delegate WebElement Wait(string xpath);
-
-
-        //public void Wait(IWebDriver driver, IWebElement element)
-        //{
-        //    // driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
-
-        //}
-
-
+        public bool IsNotDisplayed()
+        {
+            if (_element.Displayed == false)
+            {
+                return true;
+            }
+            return false;
+        }
+        public void MoveToAndClick()
+        {
+            Actions actions = new Actions(_driver);
+            actions.MoveToElement(_element).Click().Perform();
+        }
+        public void DoubleClick()
+        {
+            Actions actions = new Actions(_driver);
+            actions.MoveToElement(_element).DoubleClick().Perform();
+        }
+        public string ShowText()
+        {
+            return _element.Text;
+        }
+        public void WaitTillPopupMaskDissapear()
+        {
+            var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(30));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(By.Id("modalPopupMask")));
+        }
+        public void WaitTillAlertDissapear()
+        {
+            var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(30));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.InvisibilityOfElementLocated(By.Id("alertMsgOkBtn")));
+        }
     }
 }
