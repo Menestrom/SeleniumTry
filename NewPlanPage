@@ -1,0 +1,136 @@
+using OpenQA.Selenium;
+using PromotionPlanTests.Scenarios;
+
+namespace PromotionPlanTests.UIMap
+{
+    public class NewPlanPage
+    {
+        private WebElement _element;
+        private IWebDriver _driver;
+        public NewPlanPage(IWebDriver driver)
+        {
+            _element = new WebElement(driver);
+            _driver = driver;
+        }
+        WebElement planNameField => _element.FindByXpath("//*[@id='PlanName']");
+        WebElement skinBundleList => _element.FindByXpath("//*[@id='BundleId']");
+        public WebElement selectBundle(string bundleName) => _element.FindByXpath("//*[.='"+ bundleName+"']", bundleName);
+        WebElement addRewardsListButton => _element.FindByXpath("//*[@id='addRewards']");
+        WebElement bingoBonus => _element.FindByXpath("//*[@data-item-type='BingoBonus']");
+        WebElement gameBonus => _element.FindByXpath("//*[@data-item-type='GameBonus']");
+        WebElement freeGames => _element.FindByXpath("//*[@data-item-type='FreeGamesVoucher'][@data-item-vouchertype='1']");
+        WebElement freeTickets => _element.FindByXpath("//*[@data-item-type='BingoVoucher']");
+        WebElement jpVoucher => _element.FindByXpath("//*[@data-item-type='FreeGamesVoucher'][@data-item-vouchertype='3']");
+        WebElement speedVoucher => _element.FindByXpath("//*[@data-item-type='FreeGamesVoucher'][@data-item-vouchertype='4']");
+        WebElement stackVoucher => _element.FindByXpath("//*[@data-item-type='FreeGamesVoucher'][@data-item-vouchertype='5']");
+        WebElement messageCheckBox => _element.FindByXpath("//*[@class='btn active checkBoxAddOn ']");
+        WebElement durationField => _element.FindByXpath("//*[@id='Duration']");
+        WebElement saveButton => _element.FindByXpath("//*[@id='btnSaveUp']");
+        WebElement cancelButton => _element.FindByXpath("//*[@id='btnCancelUp']");
+        WebElement rewardEditButton => _element.FindByXpath("//span[@class ='glyphicon glyphicon-pencil']");
+        WebElement rewardDeleteButton => _element.FindByXpath("//span[@class ='glyphicon glyphicon-trash']");
+        WebElement changeBundleConfirmButton => _element.FindByXpath("//*[@onclick='$.Views.Promotions.PromotionPlans.PromotionPlanBonusDetailsView.confirmRemoveAllRewards(true)']");
+
+        public void InputPlanName(string name)
+        {
+            planNameField.SendKeys(name);
+        }
+        public void ClickOnBundleList()
+        {
+            skinBundleList.Click();
+        }
+        public void ChooseBundle(string bundleName)
+        {
+            selectBundle(bundleName).Click();
+        }
+        public void ChooseReward(string RewardType, IWebDriver driver)
+        {
+            addRewardsListButton.Click();
+            switch (RewardType)
+            {
+                case "BingoBonus":
+                    this.bingoBonus.Click();
+                    _element.WaitTillPopupMaskDissapear();
+                    FilledRewards bingoBonus = new FilledRewards(driver);
+                    bingoBonus.BingoBonusFields();
+                    _element.WaitTillPopupMaskDissapear();
+                    break;
+                case "GameBonus":
+                    this.gameBonus.Click();
+                    _element.WaitTillPopupMaskDissapear();
+                    FilledRewards gameBonus = new FilledRewards(driver);
+                    gameBonus.GamesBonusFields();
+                    _element.WaitTillPopupMaskDissapear();
+                    break;
+                case "FreeGame":
+                    this.freeGames.Click();
+                    _element.WaitTillPopupMaskDissapear();
+                    FilledRewards freeGames = new FilledRewards(driver);
+                    freeGames.FreeGaamesFields();
+                    _element.WaitTillPopupMaskDissapear();
+                    break;
+                case "FreeTicket":
+                    this.freeTickets.Click();
+                    _element.WaitTillPopupMaskDissapear();
+                    FilledRewards freeTicket = new FilledRewards(driver);
+                    freeTicket.FreeTicketFields();
+                    _element.WaitTillPopupMaskDissapear();
+                    break;
+                case "JPVoucher":
+                    this.jpVoucher.Click();
+                    _element.WaitTillPopupMaskDissapear();
+                    FilledRewards jpVouchers = new FilledRewards(driver);
+                    jpVouchers.JPVoucherFields();
+                    _element.WaitTillPopupMaskDissapear();
+                    break;
+                case "SpeedVoucher":
+                    this.speedVoucher.Click();
+                    _element.WaitTillAlertDissapear();
+                    FilledRewards speedVouchers = new FilledRewards(driver);
+                    speedVouchers.SpeedVoucherFields();
+                    break;
+                case "StackVoucher":
+                    this.stackVoucher.Click();
+                    _element.WaitTillPopupMaskDissapear();
+                    FilledRewards stackVouchers = new FilledRewards(driver);
+                    stackVouchers.StackVoucherFields();
+                    _element.WaitTillPopupMaskDissapear();
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void UnselectMessageCheckBox()
+        {
+            messageCheckBox.Click();
+        }
+        public void InputPlanDuration(string duration)
+        {
+            durationField.SendKeys(duration);
+        }
+        public void SavePlan()
+        {
+            saveButton.Click();
+            _element.WaitTillPopupMaskDissapear();
+            _element.WaitTillAlertDissapear();
+        }
+        public void CancelPlan()
+        {
+            cancelButton.Click();
+            _element.WaitTillPopupMaskDissapear();
+        }
+        public void RewardEdit()
+        {
+            rewardEditButton.MoveToAndClick();
+        }
+        public void RewardDelete()
+        {
+            rewardDeleteButton.MoveToAndClick();
+        }
+        public void ConfirmBundleChange()
+        {
+            changeBundleConfirmButton.Click();
+            _element.WaitTillPopupMaskDissapear();
+        }
+    }
+}
